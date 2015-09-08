@@ -29,27 +29,50 @@ class DataSetBase {
         
     }
     
-    
-    init(dataRows_I: [DataRow]) {
+    init(dataRows_I: [DataRow], headers_I: [String], completion: (finished: Bool) -> Void) {
+        
+        headers = headers_I
         
         rows = dataRows_I.map { DataRow(floatArray: $0.floatArray) }
         
-        buildColumns()
-        
+        buildColumns { (finished) -> Void in
+            completion(finished: true)
+        }
+
     }
     
-    func buildColumns() {
+    init(dataRowsWithStrings_I: [DataRow], headers_I: [String], completion: (finished: Bool) -> Void) {
+        
+        headers = headers_I
+        
+        rows = dataRowsWithStrings_I.map { DataRow(stringArray: $0.stringArray)}
+        
+        buildColumns { (finished) -> Void in
+            completion(finished: true)
+        }
+
+    }
+    
+    func buildColumns(completion: (finished: Bool) -> Void) {
         
         columns = []
+        
+        if rows[0].dataPoints.count == 0 {
+            print("oops")
+        }
         
         for iA in 0..<rows[0].dataPoints.count {
             let column = DataColumn()
             column.dataPoints = rows.map { $0.dataPoints[iA] }
             columns.append(column)
+            
+            if iA == (rows[0].dataPoints.count - 1) {
+                completion(finished: true)
+            }
         }
     }
     
-    func buildRows() {
+    func buildRows(completion: (finished: Bool) -> Void) {
         
         rows = []
         
@@ -57,6 +80,10 @@ class DataSetBase {
             let row = DataRow()
             row.dataPoints = columns.map { $0.dataPoints[iA] }
             rows.append(row)
+            
+            if iA == (columns[0].dataPoints.count - 1) {
+                completion(finished: true)
+            }
         }
     }
     
@@ -76,16 +103,16 @@ class DataSet : DataSetBase {
     }
     
     
-    init(dataRows_I: [DataRow], headers_I: [String]) {
-        
-        super.init()
-        
-        headers = headers_I
-        
-        rows = dataRows_I.map { DataRow(floatArray: $0.floatArray) }
-        
-        buildColumns()
-        
+    override init(dataRows_I: [DataRow], headers_I: [String], completion: (finished: Bool) -> Void) {
+        super.init(dataRows_I: dataRows_I, headers_I: headers_I) { (finished) -> Void in
+            completion(finished: true)
+        }
+    }
+    
+    override init(dataRowsWithStrings_I: [DataRow], headers_I: [String], completion: (finished: Bool) -> Void) {
+        super.init(dataRowsWithStrings_I: dataRowsWithStrings_I, headers_I: headers_I) { (finished) -> Void in
+            completion(finished: true)
+        }
     }
 }
 
@@ -98,17 +125,16 @@ private class DataSubSet : DataSetBase {
         super.init()
     }
     
+    override init(dataRows_I: [DataRow], headers_I: [String], completion: (finished: Bool) -> Void) {
+        super.init(dataRows_I: dataRows_I, headers_I: headers_I) { (finished) -> Void in
+            completion(finished: true)
+        }
+    }
     
-    init(dataColumn_I: DataColumn, header_I: String) {
-        
-        super.init()
-        
-        headers = [header_I]
-        
-        columns = [DataColumn(floatArray: dataColumn_I.floatArray)]
-        
-        buildRows()
-        
+    override init(dataRowsWithStrings_I: [DataRow], headers_I: [String], completion: (finished: Bool) -> Void) {
+        super.init(dataRowsWithStrings_I: dataRowsWithStrings_I, headers_I: headers_I) { (finished) -> Void in
+            completion(finished: true)
+        }
     }
     
     func filterByDerivedDataType(types_I: [DerivedDataType]) -> [DataColumn] {
@@ -135,22 +161,9 @@ private class DataSubSet : DataSetBase {
 class DataSuperSet {
     
     private var subSets : [DataSubSet] = []
-    //var subSetCount : Int = 0
+    var locationFlags : [Int] = []
     
-    var masterSet : DataSet {
-        
-        get {
-            return createUniformSet()
-        } set {
-            //subSetCount = masterSet.columns.count
-            subSets = []
-            for i in 0..<masterSet.columns.count {
-                let newSubSet = DataSubSet(dataColumn_I: masterSet.columns[i], header_I: masterSet.headers[i])
-                subSets.append(newSubSet)
-            }
-        }
-        
-    }
+    var masterSet : DataSet = DataSet()
     
     init() {
         
@@ -164,8 +177,62 @@ class DataSuperSet {
         return row
     }
     
+    func concatenateLocationColumns() {
+        
+        var tempDictOfSets = [Int: DataSubSet]()
+        let locationSet = DataSubSet()
+        
+        for i in 0..<subSets.count {
+            
+            tempDictOfSets[i] = subSets[i]
+            
+        }
+        
+        for i in 0..<locationFlags.count {
+            
+            if i == 0 {
+                locationSet.rows = subSets[locationFlags[i]].rows
+            }
+            
+            for row in 0..<subSets[locationFlags[i]].rows.count {
+                
+                locationSet.rows[row].dataPoints[0].stringValue += ", " + subSets[locationFlags[i]].rows[row].dataPoints[0].stringValue
+                
+            }
+            tempDictOfSets.removeValueForKey(locationFlags[i])
+        }
+        
+        var setArray : [DataSubSet] = []
+        for set in tempDictOfSets.values {
+            setArray.append(set)
+        }
+
+        subSets = setArray
+        
+    }
     
-    private func createUniformSet() -> DataSet {
+    func setMasterSet(set_I: DataSet, completion: (finished: Bool) -> Void) {
+        
+        for i in 0..<set_I.columns.count {
+            
+            let newSet = DataSubSet()
+            let stringArray = set_I.columns[i].stringArray
+            let newColumn = DataColumn(stringArray: stringArray)
+            
+            newSet.columns.append(newColumn)
+            newSet.buildRows({ (finished) -> Void in
+                
+                self.subSets.append(newSet)
+                if i == (set_I.columns.count - 1) {
+                    completion(finished: true)
+                }
+            })
+            
+        }
+        
+    }
+    
+    func getMasterSet(completion: (finished: Bool) -> Void) {
         
         let set = DataSet()
         
@@ -176,8 +243,10 @@ class DataSuperSet {
             
         }
         
-        set.buildRows()
-        return set
+        set.buildRows { (finished) -> Void in
+            self.masterSet = set
+            completion(finished: true)
+        }
         
     }
     

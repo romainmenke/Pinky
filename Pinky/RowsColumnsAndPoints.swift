@@ -30,15 +30,8 @@ class DataPoint {
     }
 }
 
-protocol RowColumnProtocol {
-    
-    func makeFloatArray() -> [Float]
-    
-    func addFloatArray(array: [Float]) -> [DataPoint]
-    
-}
 
-class RowColumnBase : RowColumnProtocol {
+class RowColumnBase {
     
     var dataPoints : [DataPoint] = []
     
@@ -47,6 +40,14 @@ class RowColumnBase : RowColumnProtocol {
             return makeFloatArray()
         } set {
             dataPoints = addFloatArray(floatArray)
+        }
+    }
+    
+    var stringArray : [String] {
+        get {
+            return makeStringArray()
+        } set {
+            dataPoints = addStringArray(stringArray)
         }
     }
     
@@ -60,13 +61,31 @@ class RowColumnBase : RowColumnProtocol {
         
     }
     
-    internal func makeFloatArray() -> [Float] {
+    init(stringArray:[String]) {
+        
+        self.dataPoints = addStringArray(stringArray)
+        
+    }
+    
+    private func makeStringArray() -> [String] {
+        
+        return dataPoints.map {$0.stringValue}
+        
+    }
+    
+    private func addStringArray(array: [String]) -> [DataPoint] {
+        
+        let tempDataPoints = array.map { DataPoint(string_I: $0) }
+        return tempDataPoints
+    }
+    
+    private func makeFloatArray() -> [Float] {
         
         return dataPoints.map {$0.floatValue}
         
     }
     
-    internal func addFloatArray(array: [Float]) -> [DataPoint] {
+    private func addFloatArray(array: [Float]) -> [DataPoint] {
         
         let tempDataPoints = array.map { DataPoint(float_I: $0) }
         return tempDataPoints
@@ -92,6 +111,10 @@ class DataRow : RowColumnBase {
         super.init(floatArray: floatArray)
     }
     
+    override init(stringArray: [String]) {
+        super.init(stringArray: stringArray)
+    }
+    
 }
 
 class DataColumn : RowColumnBase {
@@ -103,8 +126,11 @@ class DataColumn : RowColumnBase {
     }
     
     override init(floatArray: [Float]) {
-        
         super.init(floatArray: floatArray)
+    }
+    
+    override init(stringArray: [String]) {
+        super.init(stringArray: stringArray)
     }
     
 }

@@ -8,8 +8,10 @@
 
 import Cocoa
 
-class ViewController: NSViewController {
+class ViewController: NSViewController, NSOpenSavePanelDelegate {
 
+    var csvReader : CSVReader?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -22,6 +24,29 @@ class ViewController: NSViewController {
         }
     }
 
+    @IBAction func importCSV(sender: NSButton) {
+        
+        let openPanel = NSOpenPanel()
+        openPanel.canChooseFiles = true
+        openPanel.canChooseDirectories = false
+        openPanel.allowsMultipleSelection = false
+        openPanel.allowedFileTypes = ["csv"]
+        openPanel.delegate = self
+        
+        openPanel.beginWithCompletionHandler { (result) -> Void in
+            if result == NSFileHandlingPanelOKButton {
+                let url = openPanel.URL!
+                if url.pathExtension == "csv" {
+                    
+                    self.csvReader = CSVReader(path: url)
+                    
+                }
+                
+            }
+        }
+        
+    }
+    
 
 }
 
