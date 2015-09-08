@@ -14,6 +14,11 @@
 		05B9EDD51B9E577C00818724 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 05B9EDD31B9E577C00818724 /* Main.storyboard */; };
 		05B9EDE01B9E577C00818724 /* PinkyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B9EDDF1B9E577C00818724 /* PinkyTests.swift */; };
 		05B9EDEB1B9E577C00818724 /* PinkyUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B9EDEA1B9E577C00818724 /* PinkyUITests.swift */; };
+		05B9EDFA1B9E579F00818724 /* DataSetClasses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B9EDF91B9E579F00818724 /* DataSetClasses.swift */; settings = {ASSET_TAGS = (); }; };
+		05B9EDFC1B9E582500818724 /* DataDetection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B9EDFB1B9E582500818724 /* DataDetection.swift */; settings = {ASSET_TAGS = (); }; };
+		05B9EDFE1B9E58BE00818724 /* RowsColumnsAndPoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B9EDFD1B9E58BE00818724 /* RowsColumnsAndPoints.swift */; settings = {ASSET_TAGS = (); }; };
+		05B9EE061B9E5AAE00818724 /* CSVBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B9EE041B9E5AAE00818724 /* CSVBase.swift */; settings = {ASSET_TAGS = (); }; };
+		05B9EE071B9E5AAE00818724 /* CSVReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B9EE051B9E5AAE00818724 /* CSVReader.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +52,11 @@
 		05B9EDE61B9E577C00818724 /* PinkyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PinkyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		05B9EDEA1B9E577C00818724 /* PinkyUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinkyUITests.swift; sourceTree = "<group>"; };
 		05B9EDEC1B9E577C00818724 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		05B9EDF91B9E579F00818724 /* DataSetClasses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataSetClasses.swift; path = Data/DataSetClasses.swift; sourceTree = "<group>"; };
+		05B9EDFB1B9E582500818724 /* DataDetection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataDetection.swift; path = Data/DataDetection.swift; sourceTree = "<group>"; };
+		05B9EDFD1B9E58BE00818724 /* RowsColumnsAndPoints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RowsColumnsAndPoints.swift; sourceTree = "<group>"; };
+		05B9EE041B9E5AAE00818724 /* CSVBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CSVBase.swift; path = CSV/CSVBase.swift; sourceTree = "<group>"; };
+		05B9EE051B9E5AAE00818724 /* CSVReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CSVReader.swift; path = CSV/CSVReader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +107,8 @@
 		05B9EDC91B9E577C00818724 /* Pinky */ = {
 			isa = PBXGroup;
 			children = (
+				05B9EDFF1B9E5A1600818724 /* CSV */,
+				05B9EDF81B9E578500818724 /* Data */,
 				05B9EDCA1B9E577C00818724 /* AppDelegate.swift */,
 				05B9EDCC1B9E577C00818724 /* ViewController.swift */,
 				05B9EDD11B9E577C00818724 /* Assets.xcassets */,
@@ -123,6 +135,25 @@
 				05B9EDEC1B9E577C00818724 /* Info.plist */,
 			);
 			path = PinkyUITests;
+			sourceTree = "<group>";
+		};
+		05B9EDF81B9E578500818724 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				05B9EDF91B9E579F00818724 /* DataSetClasses.swift */,
+				05B9EDFB1B9E582500818724 /* DataDetection.swift */,
+				05B9EDFD1B9E58BE00818724 /* RowsColumnsAndPoints.swift */,
+			);
+			name = Data;
+			sourceTree = "<group>";
+		};
+		05B9EDFF1B9E5A1600818724 /* CSV */ = {
+			isa = PBXGroup;
+			children = (
+				05B9EE041B9E5AAE00818724 /* CSVBase.swift */,
+				05B9EE051B9E5AAE00818724 /* CSVReader.swift */,
+			);
+			name = CSV;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -255,8 +286,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				05B9EDCD1B9E577C00818724 /* ViewController.swift in Sources */,
+				05B9EE071B9E5AAE00818724 /* CSVReader.swift in Sources */,
 				05B9EDCB1B9E577C00818724 /* AppDelegate.swift in Sources */,
+				05B9EDFC1B9E582500818724 /* DataDetection.swift in Sources */,
+				05B9EDFE1B9E58BE00818724 /* RowsColumnsAndPoints.swift in Sources */,
 				05B9EDD01B9E577C00818724 /* Pinky.xcdatamodeld in Sources */,
+				05B9EE061B9E5AAE00818724 /* CSVBase.swift in Sources */,
+				05B9EDFA1B9E579F00818724 /* DataSetClasses.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -478,6 +514,7 @@
 				05B9EDF11B9E577C00818724 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		05B9EDF21B9E577C00818724 /* Build configuration list for PBXNativeTarget "PinkyTests" */ = {
 			isa = XCConfigurationList;
@@ -486,6 +523,7 @@
 				05B9EDF41B9E577C00818724 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		05B9EDF51B9E577C00818724 /* Build configuration list for PBXNativeTarget "PinkyUITests" */ = {
 			isa = XCConfigurationList;
@@ -494,6 +532,7 @@
 				05B9EDF71B9E577C00818724 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
